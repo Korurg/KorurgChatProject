@@ -1,0 +1,4 @@
+rootProject.name = 'korurg-chat-project'
+include 'twitch-api'
+include 'korurg-chat'
+
