@@ -1,0 +1,48 @@
+<!--
+  ~ Copyright © 2022-2022 KorurgChat author or authors. All rights reserved.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch auth</title>
+    <script type="text/javascript" src="/js/jquery-3.6.1.js"></script>
+</head>
+<body>
+<h1>KorurgChat</h1>
+<p id="successfully-auth"></p>
+<p id="result-auth">Please wait</p>
+</body>
+<script>
+    window.onload = function () {
+        $.post('/twitch/token',
+            {
+                payload: window.location.hash.replace('#', '')
+            },
+            function () {
+                $("#successfully-auth").text("Successfully auth on twitch.tv")
+                $("#result-auth").text("You can close this page")
+            }
+        ).fail(function () {
+            $("#successfully-auth").text("Something went wrong")
+            $("#result-auth").text("Error: KorurgChat application is not responding")
+        })
+    }
+</script>
+</html>

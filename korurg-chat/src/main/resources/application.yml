@@ -1,4 +1,10 @@
 server:
+  port: 8083
   tomcat:
     threads:
-      max: 20
+      max: 12
+spring:
+  task:
+    execution:
+      pool:
+        max-size: 12
