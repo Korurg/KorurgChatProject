@@ -8,3 +8,24 @@ spring:
     execution:
       pool:
         max-size: 12
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:data.db
+    username: admin
+    password: admin
+
+  liquibase:
+    change-log: classpath:changelog/changelog-master.xml
+
+  logging:
+    level:
+      root: debug
+
+  jpa:
+    database-platform: korurg.korurgchat.config.SQLiteDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        default-schema: korurg_chat

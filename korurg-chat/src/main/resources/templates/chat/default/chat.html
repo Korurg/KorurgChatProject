@@ -21,9 +21,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script type="text/javascript" src="/js/sockjs-1.6.1.js"></script>
+    <script type="text/javascript" src="/js/stomp-2.3.3.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.6.1.js"></script>
 </head>
 
 <body>
+<div id="response">
+
+</div>
 
 </body>
+<script type="text/javascript">
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/messages', function (messageOutput) {
+                showMessageOutput(messageOutput.body);
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        console.log("Disconnected");
+    }
+
+    function showMessageOutput(messageOutput) {
+        var response = document.getElementById('response');
+        var div = document.createElement('div')
+
+        div.innerHTML = messageOutput;
+
+        response.appendChild(div);
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+<script>
+    window.onload = function () {
+        connect()
+    }
+</script>
 </html>

@@ -18,16 +18,19 @@
 
 package korurg.korurgchat.controller;
 
+import korurg.korurgchat.service.ChatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class ChatController {
 
+    private final ChatService chatService;
 
     @GetMapping("/chat")
     public String chat() {
         return "/chat/default/chat";
     }
-
 }
