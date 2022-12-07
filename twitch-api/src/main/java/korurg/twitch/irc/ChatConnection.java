@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 KorurgChat author or authors. All rights reserved.
+ * Copyright © 2022-2022 KorurgChat author or authors. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,31 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package korurg.twitch.irc;
 
-package korurg.twitch.irc.message;
+import korurg.twitch.irc.message.Message;
+import reactor.core.publisher.Flux;
 
-import korurg.twitch.irc.ChatConnection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
-@Getter
-@Builder
-@RequiredArgsConstructor
-public class UnknownMessage implements Message {
+public interface ChatConnection {
 
-    private final ChatConnection chatConnection;
+    Flux<Message> getMessagesFlux();
 
-    private final String payload;
+    void connect(String token, String nickname, String room) throws ExecutionException, InterruptedException, IOException;
 
-    public ChatConnection getChatConnection() {
-        return chatConnection;
-    }
-
-    @Override
-    public String toString() {
-        return "UnknownMessage{" +
-                "payload='" + payload + '\'' +
-                '}';
-    }
+    void connect(String room) throws IOException, ExecutionException, InterruptedException;
 }

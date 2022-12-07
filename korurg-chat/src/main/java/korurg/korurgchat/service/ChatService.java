@@ -18,48 +18,63 @@
 
 package korurg.korurgchat.service;
 
+import korurg.korurgchat.domain.dto.ChatMessageVDTO;
+import korurg.twitch.irc.ChatConnection;
+import korurg.twitch.irc.message.CommonMessage;
+import korurg.twitch.irc.message.Message;
+import korurg.twitch.service.TwitchApiService;
+import korurg.twitch.service.TwitchUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import java.io.File;
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatService {
 
+    @Qualifier("twitchChatConnection")
+    private final ChatConnection twitchChatConnection;
     private final SimpMessagingTemplate simpMessagingTemplate;
-
+    private final TwitchApiService twitchApiService;
+    private final TwitchUserService twitchUserService;
     private final ServletContext context;
 
     @PostConstruct
-    public void postConstruct() {
+    private void postConstruct() {
+        connectToChats("rekvizit8bit");
+    }
+
+    private void accept(Message message) {
+        if (message instanceof CommonMessage commonMessage) {
+            ChatMessageVDTO chatMessageVDTO = ChatMessageVDTO.builder()
+                    .message(commonMessage.getText())
+                    .user(commonMessage.getDisplayName())
+                    .userColor(commonMessage.getUserColor())
+                    .build();
+
+            simpMessagingTemplate.convertAndSend("/topic/messages", chatMessageVDTO);
+        }
+    }
+
+    public void connectToChats(String twitchChat) {
         try {
-            System.out.println(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
-        } catch (URISyntaxException e) {
+            twitchChatConnection.connect(twitchChat);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        Thread thread = new Thread((() -> {
-            while (true) {
-
-                String element = "<a>${name} : ${message}</a>";
-                element = element.replace("${name}", "korurg");
-                element = element.replace("${message}", "hello world");
-
-                simpMessagingTemplate.convertAndSend("/topic/messages", element);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }));
-        thread.start();
+        twitchChatConnection.getMessagesFlux().subscribe(this::accept);
     }
 }

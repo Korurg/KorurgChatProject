@@ -18,7 +18,7 @@
 
 package korurg.twitch.irc.message;
 
-import korurg.twitch.irc.IrcConnection;
+import korurg.twitch.irc.ChatConnection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +35,7 @@ public class RoomstateMessage implements Message {
     private final int slow;
     private final boolean isSubOnly;
 
-    private final IrcConnection ircConnection;
-
-    @Override
-    public IrcConnection getIrcConnection() {
-        return ircConnection;
-    }
-
+    private final ChatConnection chatConnection;
     @Override
     public String toString() {
         return "RoomstateMessage{" +
@@ -52,5 +46,10 @@ public class RoomstateMessage implements Message {
                 ", slow=" + slow +
                 ", isSubOnly=" + isSubOnly +
                 '}';
+    }
+
+    @Override
+    public ChatConnection getChatConnection() {
+        return chatConnection;
     }
 }

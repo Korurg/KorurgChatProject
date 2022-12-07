@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet author="Korurg" id="2022-12-05--19-45--base-init">
+        <createTable tableName="twitch_users">
+            <column name="id" type="TEXT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="login" type="TEXT"/>
+            <column name="display_name" type="TEXT"/>
+            <column name="user_type" type="TEXT"/>
+            <column name="broadcaster_type" type="TEXT"/>
+            <column name="description" type="TEXT"/>
+            <column name="profile_image_url" type="TEXT"/>
+            <column name="offline_image_url" type="TEXT"/>
+            <column name="created_at" type="TEXT"/>
+            <column name="update_date_time" type="INTEGER"/>
+
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

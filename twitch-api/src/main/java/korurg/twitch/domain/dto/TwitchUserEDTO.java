@@ -16,30 +16,41 @@
  *
  */
 
-package korurg.twitch.irc.message;
+package korurg.twitch.domain.dto;
 
-import korurg.twitch.irc.ChatConnection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
-public class UnknownMessage implements Message {
+@NoArgsConstructor
+@AllArgsConstructor
+public class TwitchUserEDTO {
 
-    private final ChatConnection chatConnection;
+    @JsonProperty("id")
+    private String id;
 
-    private final String payload;
+    @JsonProperty("login")
+    private String login;
 
-    public ChatConnection getChatConnection() {
-        return chatConnection;
-    }
+    @JsonProperty("display_name")
+    private String displayName;
 
-    @Override
-    public String toString() {
-        return "UnknownMessage{" +
-                "payload='" + payload + '\'' +
-                '}';
-    }
+    @JsonProperty("type")
+    private String userType;
+
+    @JsonProperty("broadcaster_type")
+    private String broadcasterType;
+
+    @JsonProperty("description")
+    private String description;
+
+    @JsonProperty("profile_image_url")
+    private String profileImageUrl;
+
+    @JsonProperty("offline_image_url")
+    private String offlineImageUrl;
+
+    @JsonProperty("created_at")
+    private String createdAt;
 }

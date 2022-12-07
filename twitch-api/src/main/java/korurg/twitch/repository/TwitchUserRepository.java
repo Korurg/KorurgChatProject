@@ -16,30 +16,13 @@
  *
  */
 
-package korurg.twitch.irc.message;
+package korurg.twitch.repository;
 
-import korurg.twitch.irc.ChatConnection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import korurg.twitch.domain.model.TwitchUser;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Getter
-@Builder
-@RequiredArgsConstructor
-public class UnknownMessage implements Message {
+import java.util.Optional;
 
-    private final ChatConnection chatConnection;
-
-    private final String payload;
-
-    public ChatConnection getChatConnection() {
-        return chatConnection;
-    }
-
-    @Override
-    public String toString() {
-        return "UnknownMessage{" +
-                "payload='" + payload + '\'' +
-                '}';
-    }
+public interface TwitchUserRepository extends JpaRepository<TwitchUser, String> {
+    Optional<TwitchUser> findByLogin(String login);
 }

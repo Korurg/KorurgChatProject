@@ -1,71 +1,25 @@
-<!--
-  ~ Copyright © 2022 KorurgChat author or authors. All rights reserved.
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  ~
-  -->
+<div>
+    <div id="messages">
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script type="text/javascript" src="/js/sockjs-1.6.1.js"></script>
-    <script type="text/javascript" src="/js/stomp-2.3.3.js"></script>
-    <script type="text/javascript" src="/js/jquery-3.6.1.js"></script>
-</head>
+    </div>
 
-<body>
-<div id="response">
+    <script>
 
+        let countMessages = 0;
+
+        document.addEventListener('new-message', (message) => {
+                let messagesElement = $("#messages");
+
+                if (countMessages > 50) {
+                    messagesElement.find(':first-child').remove();
+                }
+
+                messagesElement.append("<div>" + JSON.stringify(message.detail) + "</div>")
+
+                window.scrollTo(0, document.body.scrollHeight);
+
+                countMessages++;
+            }
+        )
+    </script>
 </div>
-
-</body>
-<script type="text/javascript">
-    var stompClient = null;
-
-    function connect() {
-        var socket = new SockJS('/chat');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/messages', function (messageOutput) {
-                showMessageOutput(messageOutput.body);
-            });
-        });
-    }
-
-    function disconnect() {
-        if (stompClient != null) {
-            stompClient.disconnect();
-        }
-        console.log("Disconnected");
-    }
-
-    function showMessageOutput(messageOutput) {
-        var response = document.getElementById('response');
-        var div = document.createElement('div')
-
-        div.innerHTML = messageOutput;
-
-        response.appendChild(div);
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-</script>
-<script>
-    window.onload = function () {
-        connect()
-    }
-</script>
-</html>

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2022 KorurgChat author or authors. All rights reserved.
+ * Copyright © 2022 KorurgChat author or authors. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,7 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package korurg.twitch.irc;
 
-public interface IrcConnection {//TODO: replace with ChatConnection (Youtube, goodgame etc.)
+package korurg.korurgchat.config;
+
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Configuration;
+
+@EnableFeignClients(value = "korurg")
+@Configuration
+public class FeignClientConfig {
 }

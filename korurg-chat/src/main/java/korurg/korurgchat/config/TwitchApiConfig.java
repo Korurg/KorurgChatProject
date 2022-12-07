@@ -16,30 +16,23 @@
  *
  */
 
-package korurg.twitch.irc.message;
+package korurg.korurgchat.config;
 
 import korurg.twitch.irc.ChatConnection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import korurg.twitch.irc.message.TwitchIrcMessageParser;
+import korurg.twitch.irc.websocket.TwitchChatWebSocketConnection;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
-@Getter
-@Builder
-@RequiredArgsConstructor
-public class UnknownMessage implements Message {
+@Configuration
+public class TwitchApiConfig {
 
-    private final ChatConnection chatConnection;
-
-    private final String payload;
-
-    public ChatConnection getChatConnection() {
-        return chatConnection;
-    }
-
-    @Override
-    public String toString() {
-        return "UnknownMessage{" +
-                "payload='" + payload + '\'' +
-                '}';
+    @Bean("twitchChatConnection")
+    public ChatConnection getWebsocketIrcConnection() {
+        return new TwitchChatWebSocketConnection("wss://irc-ws.chat.twitch.tv",
+                443,
+                new StandardWebSocketClient(),
+                new TwitchIrcMessageParser());
     }
 }

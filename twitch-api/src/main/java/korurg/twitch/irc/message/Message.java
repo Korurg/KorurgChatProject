@@ -18,9 +18,9 @@
 
 package korurg.twitch.irc.message;
 
-import korurg.twitch.irc.IrcConnection;
+import korurg.twitch.irc.ChatConnection;
 
 public interface Message {
-    IrcConnection getIrcConnection();
+    ChatConnection getChatConnection();
 
 }

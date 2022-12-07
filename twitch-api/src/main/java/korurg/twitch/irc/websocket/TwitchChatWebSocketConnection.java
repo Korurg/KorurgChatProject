@@ -18,70 +18,85 @@
 
 package korurg.twitch.irc.websocket;
 
-import korurg.twitch.irc.IrcConnection;
+import korurg.twitch.irc.ChatConnection;
+import korurg.twitch.irc.message.IrcMessageFactory;
 import korurg.twitch.irc.message.Message;
-import korurg.twitch.irc.message.MessageParser;
+import korurg.twitch.irc.message.TwitchIrcMessageParser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.client.AbstractWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class WebSocketIrcConnection extends TextWebSocketHandler implements WebSocketHandler, IrcConnection {
+@Slf4j
+public class TwitchChatWebSocketConnection extends TextWebSocketHandler implements WebSocketHandler, ChatConnection {
+    private static final String ANONYMOUS_USER = "justinfan" + ThreadLocalRandom.current().nextInt(100,10000);
+    private final String hostname;
+    private final int port;
+    private final TwitchIrcMessageParser twitchIrcMessageParser;
 
-    private String hostname;
-    private int port;
-    private MessageParser messageParser;
-
-    private StandardWebSocketClient client;
+    private final AbstractWebSocketClient client;
     private WebSocketSession session;
 
     private final Sinks.Many<Message> messagesSinks = Sinks.many().replay().limit(50);
 
-    public WebSocketIrcConnection(String hostname, int port, MessageParser messageParser) {
+    public TwitchChatWebSocketConnection(String hostname, int port,
+                                         AbstractWebSocketClient client, TwitchIrcMessageParser twitchIrcMessageParser) {
         this.hostname = hostname;
         this.port = port;
-        this.messageParser = messageParser;
+        this.client = client;
+        this.twitchIrcMessageParser = twitchIrcMessageParser;
     }
 
+    @Override
     public Flux<Message> getMessagesFlux() {
         return messagesSinks.asFlux();
     }
 
+    @Override
     public void connect(String token, String nickname, String room) throws ExecutionException, InterruptedException, IOException {//TODO: change param to token struct
-        client = new StandardWebSocketClient();
-
         session = client.doHandshake(this, hostname + ":" + port).get();
+
+        session.sendMessage(IrcMessageFactory.createRequestCapabilitiesMessage(IrcMessageFactory.ReqCap.COMMANDS,
+                IrcMessageFactory.ReqCap.TAGS,
+                IrcMessageFactory.ReqCap.MEMBERSHIP));
+
         boolean isAnonymous = token == null || nickname == null;
 
-        session.sendMessage(new TextMessage("CAP REQ :twitch.tv/membership twitch.tv/tags twitch.tv/commands"));
-
         if (isAnonymous) {
-            session.sendMessage(new TextMessage("NICK justinfan" + 1231));//TODO: generate random number
+            session.sendMessage(IrcMessageFactory.createNickMessage(ANONYMOUS_USER));
         } else {
-            session.sendMessage(new TextMessage("PASS oauth" + token));
-            session.sendMessage(new TextMessage("NICK " + nickname));
+            session.sendMessage(IrcMessageFactory.createPassMessage(token));
+            session.sendMessage(IrcMessageFactory.createNickMessage(nickname));
         }
 
-        session.sendMessage(new TextMessage("JOIN #" + room));
+        session.sendMessage(IrcMessageFactory.createJoinMessage(room));
     }
 
-    public void sendMessage() {
-
+    public void sendMessage(String payload) {
+        try {
+            session.sendMessage(new TextMessage(payload));
+        } catch (IOException e) {
+            throw new RuntimeException(e);//TODO
+        }
     }
 
+    @Override
     public void connect(String room) throws IOException, ExecutionException, InterruptedException {
         connect(null, null, room);
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
-        messageParser.parseMessage(message, this).forEach(messagesSinks::tryEmitNext);
+        log.info("raw message: "+message.getPayload());
+        twitchIrcMessageParser.parseMessage(message, this).forEach(messagesSinks::tryEmitNext);
     }
 
 }

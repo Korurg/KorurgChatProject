@@ -16,30 +16,24 @@
  *
  */
 
-package korurg.twitch.irc.message;
+package korurg.twitch.domain.enums;
 
-import korurg.twitch.irc.ChatConnection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
 
-@Getter
-@Builder
-@RequiredArgsConstructor
-public class UnknownMessage implements Message {
+public enum TwitchBroadcasterType {
+    AFFILIATE("affiliate"),
+    PARTNER("partner"),
+    COMMON("common");
+    private String code;
 
-    private final ChatConnection chatConnection;
-
-    private final String payload;
-
-    public ChatConnection getChatConnection() {
-        return chatConnection;
+    TwitchBroadcasterType(String code) {
+        this.code = code;
     }
 
-    @Override
-    public String toString() {
-        return "UnknownMessage{" +
-                "payload='" + payload + '\'' +
-                '}';
+    public static TwitchBroadcasterType getByCode(String code){
+        return Arrays.stream(TwitchBroadcasterType.values())
+                .filter(twitchBroadcasterType -> twitchBroadcasterType.code.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException());
     }
 }

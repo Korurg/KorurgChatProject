@@ -18,7 +18,7 @@
 
 package korurg.twitch.irc.message;
 
-import korurg.twitch.irc.IrcConnection;
+import korurg.twitch.irc.ChatConnection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommonMessage implements Message {
 
-    private final IrcConnection ircConnection;
+    private final ChatConnection chatConnection;
 
     private final String user;
 
@@ -65,9 +65,8 @@ public class CommonMessage implements Message {
 
     private final String userType;
 
-    @Override
-    public IrcConnection getIrcConnection() {
-        return ircConnection;
+    public ChatConnection getChatConnection() {
+        return chatConnection;
     }
 
     @Override

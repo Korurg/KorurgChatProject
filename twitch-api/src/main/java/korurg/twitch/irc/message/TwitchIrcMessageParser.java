@@ -18,7 +18,7 @@
 
 package korurg.twitch.irc.message;
 
-import korurg.twitch.irc.IrcConnection;
+import korurg.twitch.irc.ChatConnection;
 import org.springframework.web.socket.TextMessage;
 
 import java.util.ArrayList;
@@ -27,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MessageParser {
+public class TwitchIrcMessageParser {
 
     //TODO: maybe remove ircConnection
-    public List<Message> parseMessage(TextMessage textMessage, IrcConnection ircConnection) {
+    public List<Message> parseMessage(TextMessage textMessage, ChatConnection chatConnection) {
         try {
 
 
@@ -65,14 +65,14 @@ public class MessageParser {
                 String command = rawCommandComponent.split(" ")[1];
 
                 Message message = switch (command) {
-                    case "JOIN" -> parseJoinMessage(rawCommandComponent, ircConnection);
+                    case "JOIN" -> parseJoinMessage(rawCommandComponent, chatConnection);
                     case "PRIVMSG" ->
-                            parsePrivMessage(rawTagsComponent, rawCommandComponent, rawMessageComponent, ircConnection);
-                    case "ROOMSTATE" -> parseRoomstateMessage(rawTagsComponent, ircConnection);
+                            parsePrivMessage(rawTagsComponent, rawCommandComponent, rawMessageComponent, chatConnection);
+                    case "ROOMSTATE" -> parseRoomstateMessage(rawTagsComponent, chatConnection);
 
 
                     default -> UnknownMessage.builder()
-                            .ircConnection(ircConnection)
+                            .chatConnection(chatConnection)
                             .payload(rawMsg)
                             .build();
                 };
@@ -85,16 +85,16 @@ public class MessageParser {
             ex.printStackTrace();
         }
         return List.of(UnknownMessage.builder()
-                .ircConnection(ircConnection)
+                .chatConnection(chatConnection)
                 .build());
     }
 
     private Message parseRoomstateMessage(String rawTagsComponent,
-                                          IrcConnection ircConnection) {
+                                          ChatConnection chatConnection) {
         Map<String, String> tags = getTags(rawTagsComponent);
 
         return RoomstateMessage.builder()
-                .ircConnection(ircConnection)
+                .chatConnection(chatConnection)
                 .isEmoteOnly(tags.get("emote-only").equals("1"))
                 .isSubOnly(tags.get("subs-only").equals("1"))
                 .isFollowersOnly(!tags.get("followers-only").equals("-1"))
@@ -115,11 +115,11 @@ public class MessageParser {
 
 
     private Message parseJoinMessage(String rawCommandComponent,
-                                     IrcConnection ircConnection) {
+                                     ChatConnection chatConnection) {
         String[] rawCommandComponents = rawCommandComponent.split(" ");
 
         return JoinMessage.builder()
-                .ircConnection(ircConnection)
+                .chatConnection(chatConnection)
                 .room(rawCommandComponents[2])
                 .build();
     }
@@ -127,7 +127,7 @@ public class MessageParser {
     private Message parsePrivMessage(String rawTagsComponent,
                                      String rawCommandComponent,
                                      String rawMessageComponent,
-                                     IrcConnection ircConnection) {
+                                     ChatConnection chatConnection) {
 
         Map<String, String> tags = getTags(rawTagsComponent);
 
@@ -135,7 +135,7 @@ public class MessageParser {
 
         return CommonMessage.builder()
                 .user(rawCommandComponents[0].split("!")[0])
-                .ircConnection(ircConnection)
+                .chatConnection(chatConnection)
                 .userId(Long.parseLong(tags.get("user-id")))
                 .userColor(tags.get("color"))
                 .displayName(tags.get("display-name"))

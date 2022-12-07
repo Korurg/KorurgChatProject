@@ -18,8 +18,9 @@ dependencies {
     implementation project(':twitch-api')
     implementation 'me.friwi:jcefmaven:107.1.9'
     implementation 'org.xerial:sqlite-jdbc:3.39.4.1'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
+
     implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.7.5'
+
     liquibaseRuntime 'org.liquibase:liquibase-core:4.17.2'
     runtimeOnly 'org.liquibase:liquibase-core:4.17.2'
 }

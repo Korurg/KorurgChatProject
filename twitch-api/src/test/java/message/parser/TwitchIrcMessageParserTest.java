@@ -26,12 +26,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MessageParserTest {
+class TwitchIrcMessageParserTest {
 
     @Test
     void testJoinMessage() {
-        MessageParser messageParser = new MessageParser();
-        List<Message> messages = messageParser.parseMessage(new TextMessage(":justinfan1231!justinfan1231@justinfan1231.tmi.twitch.tv JOIN #alinarinrin"), null);
+        TwitchIrcMessageParser twitchIrcMessageParser = new TwitchIrcMessageParser();
+        List<Message> messages = twitchIrcMessageParser.parseMessage(new TextMessage(":justinfan1231!justinfan1231@justinfan1231.tmi.twitch.tv JOIN #alinarinrin"), null);
 
         assertEquals(1, messages.size());
         assertInstanceOf(JoinMessage.class, messages.get(0));
@@ -39,8 +39,8 @@ class MessageParserTest {
 
     @Test
     void testRoomstateMessage() {
-        MessageParser messageParser = new MessageParser();
-        List<Message> messages = messageParser.parseMessage(new TextMessage("@emote-only=0;followers-only=10;r9k=0;" +
+        TwitchIrcMessageParser twitchIrcMessageParser = new TwitchIrcMessageParser();
+        List<Message> messages = twitchIrcMessageParser.parseMessage(new TextMessage("@emote-only=0;followers-only=10;r9k=0;" +
                 "room-id=114037984;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #alinarinrin"), null);
 
         assertEquals(1, messages.size());
@@ -61,8 +61,8 @@ class MessageParserTest {
                 "tmi-sent-ts=1669145309523;turbo=0;user-id=414365041;user-type= " +
                 ":beachbum511!beachbum511@beachbum511.tmi.twitch.tv PRIVMSG #alinarinrin :monkaHmm";
 
-        MessageParser messageParser = new MessageParser();
-        List<Message> messages = messageParser.parseMessage(new TextMessage(rawMessage), null);
+        TwitchIrcMessageParser twitchIrcMessageParser = new TwitchIrcMessageParser();
+        List<Message> messages = twitchIrcMessageParser.parseMessage(new TextMessage(rawMessage), null);
 
         assertEquals(1, messages.size());
         assertInstanceOf(CommonMessage.class, messages.get(0));

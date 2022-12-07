@@ -18,26 +18,25 @@
 
 package korurg.korurgchat;
 
-import korurg.korurgchat.ui.chat.JStreamChat;
-import korurg.twitch.irc.message.MessageParser;
-import korurg.twitch.irc.websocket.WebSocketIrcConnection;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.util.Arrays;
 
+@Slf4j
 @SpringBootApplication(scanBasePackages = "korurg")
 public class KorurgChatApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        SpringApplication.run(KorurgChatApplication.class, args);
+        if (Arrays.stream(args).anyMatch(s -> s.equals("ui-mode"))) {
+
+        } else {
+            SpringApplication.run(KorurgChatApplication.class, args);
+
+        }
 
 //        ConfigurableApplicationContext context = new SpringApplicationBuilder(KorurgChatApplication.class)
 //                .headless(false)

@@ -16,30 +16,20 @@
  *
  */
 
-package korurg.twitch.irc.message;
+package korurg.korurgchat.domain.dto;
 
-import korurg.twitch.irc.ChatConnection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 @RequiredArgsConstructor
-public class UnknownMessage implements Message {
+public class ChatMessageVDTO {
+    private final String user;
+    private final String message;
 
-    private final ChatConnection chatConnection;
-
-    private final String payload;
-
-    public ChatConnection getChatConnection() {
-        return chatConnection;
-    }
-
-    @Override
-    public String toString() {
-        return "UnknownMessage{" +
-                "payload='" + payload + '\'' +
-                '}';
-    }
+    private final String userColor;
 }
