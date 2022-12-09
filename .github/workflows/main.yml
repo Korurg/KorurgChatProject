@@ -39,7 +39,7 @@ jobs:
 
     - name: Create a Release
       run: |
-        hub release delete "unstable"
+        (hub release delete "unstable") || true
         hub release create -a "./korurg-chat-unstable.zip" -m "Unstable release" -m "Release date: $(date)" "unstable"
       shell: bash
       env:
