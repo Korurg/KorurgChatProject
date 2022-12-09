@@ -32,7 +32,7 @@ jobs:
         arguments: korurg-chat:build
 
     - name: Create a Release
-      run: $GITHUB_ACTION_PATH/release.sh
+      run: ./release.sh
       shell: bash
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
