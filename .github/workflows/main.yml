@@ -31,8 +31,15 @@ jobs:
       with:
         arguments: korurg-chat:build
 
+    - name: Zip release
+      run: |
+        zip ./korurg-chat-unstable.zip ./templates
+        zip ./korurg-chat-unstable.zip ./korurg-chat/build/libs/korurg-chat.jar
+      shell: bash
+
     - name: Create a Release
-      run: ./.github/workflows/release.sh
+      run: |
+        hub release create -a "./korurg-chat-unstable.zip"
       shell: bash
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
