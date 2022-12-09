@@ -39,7 +39,7 @@ jobs:
 
     - name: Create a Release
       run: |
-        hub release create -a "./korurg-chat-unstable.zip"
+        hub release create -a "./korurg-chat-unstable.zip" -m "unstable release" "unstable"
       shell: bash
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
