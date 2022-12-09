@@ -8,10 +8,12 @@
 name: Java CI with Gradle
 
 on:
+  workflow_dispatch
   push:
     branches: [ "dev" ]
   pull_request:
     branches: [ "dev" ]
+  
 
 permissions:
   contents: read
