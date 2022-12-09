@@ -11,14 +11,12 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:data.db
-    username: admin
-    password: admin
 
   liquibase:
     change-log: classpath:changelog/changelog-master.xml
 
   jpa:
-    database-platform: korurg.korurgchat.config.SQLiteDialect
+    database-platform: korurg.db.config.SQLiteDialect
     hibernate:
       ddl-auto: none
     show-sql: true
@@ -26,18 +24,23 @@ spring:
       hibernate:
         default-schema: korurg_chat
 
+
 logging:
   file: logs.log
   level:
     root: INFO
-#    korurg.twitch.api : DEBUG
-
 
 twitch:
-  client-id: ppuramprp8enkf06eubkfnqq6k0ysi
+  client-id: ${KORURG_CHAT_TWITCH_CLIENT_ID}
+
+app:
+  version: ${KORURG_CHAT_PROJECT_VERSION}
 
 sentry:
-  dsn: https://47c5970cb0ca44b48725a03b6537558d@o4504201942925312.ingest.sentry.io/4504201945874432
+  environment: ${KORURG_CHAT_SENTRY_ENV}
+  release: ${KORURG_CHAT_PROJECT_VERSION}
+  dsn: ${KORURG_CHAT_SENTRY_DSN}
+
   logging:
     minimum-breadcrumb-level: INFO
     minimum-event-level: ERROR
@@ -47,9 +50,3 @@ sentry:
 korurg-chat:
   intervals:
     update-user-info-sec: 604800
-
-#feign:
-#  client:
-#    config:
-#      default:
-#        loggerLevel: full

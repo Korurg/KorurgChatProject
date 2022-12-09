@@ -1,0 +1,11 @@
+author: Korurg
+name: official English translation
+description: official English translation
+version: 1.0.0
+translation:
+  ui:
+    common:
+      yes: "yes"
+      no: "no"
+      back: "back"
+      cancel: "cancel"

@@ -18,18 +18,33 @@
 
 package korurg.korurgchat.domain.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatMessageVDTO {
-    private final String user;
-    private final String message;
 
-    private final String userColor;
+    @JsonProperty("user")
+    private String user;
+
+    @JsonProperty("message")
+    private String message;
+
+    @JsonProperty("userColor")
+    private String userColor;
+
+    @JsonProperty("roles")
+    private List<String> roles;
+
+    @JsonProperty("badges")
+    private List<String> badges;
+
+    @JsonProperty("platform")
+    private String platform;
 }

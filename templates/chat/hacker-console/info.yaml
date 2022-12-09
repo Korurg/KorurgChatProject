@@ -1,0 +1,25 @@
+# api-version - api file version
+api-version: v1
+# type - template type (chat/notification/etc...)
+type: chat
+metadata:
+  # any template name
+  name: hacker-chat
+  # author (optional)
+  author: Korurg
+  # version (optional)
+  version: 1.0.0
+  # description (optional)
+  descriptions:
+    # lang ISO 639-1
+    en: 'hacker like chat'
+    ru: 'чат в стиле консоли хакера'
+spec:
+  # main html file
+  main-file: chat.html
+  # substitution templates. in the html is specified as {{SOMETHING}}. for example {{TITLE}} (optional)
+  templates:
+    - name: TITLE
+      # variable type (text/number/etc...)
+      type: text
+      default-value: Chat

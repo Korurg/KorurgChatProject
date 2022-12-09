@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':settings')
+    implementation project(':core-exceptions')
+}
+
+test {
+    useJUnitPlatform()
+}

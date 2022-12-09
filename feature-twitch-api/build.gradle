@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+}
+
+group 'korurg'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":settings") //TODO: remove
+}
+
+test {
+    useJUnitPlatform()
+}

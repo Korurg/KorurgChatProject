@@ -1,10 +1,18 @@
 <div>
-    <div id="messages">
+    <div>
+        <div>
+            <h2 class="title">{{TITLE}}</h2>
+        </div>
+        <div id="messages">
 
+        </div>
     </div>
     <template id="tmpl">
-        <div class="message">
+        <div class="chatMessage">
             <p>
+                <span class="badges">
+
+                </span>
                 <span class="nickname">
                     User 1
                 </span>
@@ -17,11 +25,17 @@
     </template>
 
     <style>
-        .message {
+
+        .title {
+            color: green;
+            font-family: Consolas;
+        }
+
+        .chatMessage {
             background: black;
         }
 
-        .message * {
+        .chatMessage * {
             color: green;
             font-family: Consolas;
         }
@@ -30,16 +44,25 @@
             color: green;
             font-family: Consolas;
         }
+
+        .badges {
+            align-content: center;
+        }
+
+        .badges > img {
+            width: 16px;
+            height: 16px;
+        }
     </style>
     <script>
 
         let countMessages = 0;
 
-        document.addEventListener('new-message', (event) => {
+        document.addEventListener('new-chatMessage', (event) => {
                 let messagesElement = $("#messages");
 
                 if (countMessages > 50) {
-                    messagesElement.find(':first-child').remove();
+                    messagesElement.find('div').first().remove();
                 }
 
                 let tmplElement = $($("#tmpl").html());
@@ -48,7 +71,10 @@
                 tmplElement.find(".nickname").css("color", event.detail.userColor);
 
                 tmplElement.find(".text").html(event.detail.message);
-
+                // https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png
+                if (event.detail.platform == "TWITCH") {
+                    tmplElement.find(".badges").append("<img src='https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png'></img>")
+                }
 
                 messagesElement.append(tmplElement);
 

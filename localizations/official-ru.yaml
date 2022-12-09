@@ -1,0 +1,11 @@
+author: Korurg
+name: official Russian translation
+description: official Russian translation
+version: 1.0.0
+translation:
+  ui:
+    common:
+      yes: "да"
+      no: "нет"
+      back: "назад"
+      cancel: "отмена"

@@ -18,12 +18,23 @@
 
 package korurg.korurgchat;
 
-import korurg.utils.service.SettingsService;
+import io.sentry.Sentry;
+import korurg.korurgchat.ui.UiFactory;
+import korurg.korurgchat.ui.main.MainFrame;
+import korurg.localization.impl.service.LocalizationService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Arrays;
 
 @Slf4j
@@ -32,38 +43,24 @@ public class KorurgChatApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        if (Arrays.stream(args).anyMatch(s -> s.equals("ui-mode"))) {
 
+        if (Arrays.stream(args).anyMatch(s -> s.equals("ui-mode"))) {
+            ConfigurableApplicationContext context = new SpringApplicationBuilder(KorurgChatApplication.class)
+                    .headless(false)
+                    .run(args);
+
+            EventQueue.invokeLater(() -> {
+
+                UiFactory uiFactory = context.getBean(UiFactory.class);
+
+                MainFrame mainFrame = uiFactory.createInstance(MainFrame.class);
+                mainFrame.initFrame();
+
+                mainFrame.setVisible(true);
+            });
         } else {
             SpringApplication.run(KorurgChatApplication.class, args);
-
         }
 
-        SettingsService settingsService = new SettingsService();
-        settingsService.loadFromFile();
-
-//        ConfigurableApplicationContext context = new SpringApplicationBuilder(KorurgChatApplication.class)
-//                .headless(false)
-//                .run(args);
-//
-//        EventQueue.invokeLater(() -> {
-//            JStreamChat jStreamChat = new JStreamChat();
-//
-//            WebSocketIrcConnection webSocketIrcConnection = new WebSocketIrcConnection("wss://irc-ws.chat.twitch.tv", 443, new MessageParser());
-//            try {
-//                webSocketIrcConnection.connect("juice");
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            } catch (ExecutionException e) {
-//                throw new RuntimeException(e);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//
-//            webSocketIrcConnection.getMessagesFlux().subscribe(textMessage -> {
-//                System.out.println(textMessage);
-//            });
-//        });
     }
 }

@@ -7,14 +7,14 @@
 
         let countMessages = 0;
 
-        document.addEventListener('new-message', (message) => {
+        document.addEventListener('new-chatMessage', (chatMessage) => {
                 let messagesElement = $("#messages");
 
                 if (countMessages > 50) {
                     messagesElement.find(':first-child').remove();
                 }
 
-                messagesElement.append("<div>" + JSON.stringify(message.detail) + "</div>")
+                messagesElement.append("<div>" + JSON.stringify(chatMessage.detail) + "</div>")
 
                 window.scrollTo(0, document.body.scrollHeight);
 
