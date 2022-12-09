@@ -120,3 +120,5 @@ gradle-app.setting
 jcef-bundle/*
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+iml,gradle
+
+data.db

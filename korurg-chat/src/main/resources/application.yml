@@ -35,7 +35,6 @@ logging:
 
 twitch:
   client-id: ppuramprp8enkf06eubkfnqq6k0ysi
-  token: 0k5fhwuzm7kea40r3kt0m86f96vuim #TODO: !!!! GET VIA AUTH URL !!!! DONT SAVE !!!!
 
 sentry:
   dsn: https://47c5970cb0ca44b48725a03b6537558d@o4504201942925312.ingest.sentry.io/4504201945874432

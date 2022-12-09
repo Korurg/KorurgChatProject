@@ -39,7 +39,7 @@ public class TwitchApiService {
     @Value("${twitch.client-id}")
     private String twitchClientId;
 
-    @Value("${twitch.token}")
+//    @Value("${twitch.token}")
     private String twitchToken;
 
     public void auth() {

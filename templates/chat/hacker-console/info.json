@@ -1,6 +1,9 @@
 {
   "name": "hacker-chat",
-  "description": "",
+  "description": {
+    "en": "",
+    "ru": ""
+  },
   "author": "Korurg",
   "version": "1.0.0",
   "main-file": "chat.html"

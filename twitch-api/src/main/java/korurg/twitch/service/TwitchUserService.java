@@ -38,7 +38,7 @@ public class TwitchUserService {
     @Value("${twitch.client-id}")
     private String twitchClientId;
 
-    @Value("${twitch.token}")
+//    @Value("${twitch.token}")
     private String twitchToken;
 
     @Value("${korurg-chat.intervals.update-user-info-sec}")
