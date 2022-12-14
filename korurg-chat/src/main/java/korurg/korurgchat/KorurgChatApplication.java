@@ -18,7 +18,6 @@
 
 package korurg.korurgchat;
 
-import korurg.utils.service.SettingsService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -39,8 +38,6 @@ public class KorurgChatApplication {
 
         }
 
-        SettingsService settingsService = new SettingsService();
-        settingsService.loadFromFile();
 
 //        ConfigurableApplicationContext context = new SpringApplicationBuilder(KorurgChatApplication.class)
 //                .headless(false)

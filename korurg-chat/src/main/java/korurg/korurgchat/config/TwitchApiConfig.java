@@ -18,9 +18,10 @@
 
 package korurg.korurgchat.config;
 
-import korurg.twitch.irc.ChatConnection;
-import korurg.twitch.irc.message.TwitchIrcMessageParser;
-import korurg.twitch.irc.websocket.TwitchChatWebSocketConnection;
+import korurg.chat.api.ChatConnection;
+import korurg.twitch.impl.irc.message.TwitchIrcMessageParser;
+import korurg.twitch.impl.irc.message.TwitchMessageConverter;
+import korurg.twitch.impl.irc.websocket.TwitchChatWebSocketConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -32,7 +33,9 @@ public class TwitchApiConfig {
     public ChatConnection getWebsocketIrcConnection() {
         return new TwitchChatWebSocketConnection("wss://irc-ws.chat.twitch.tv",
                 443,
+                "rekvizit8bit",
                 new StandardWebSocketClient(),
-                new TwitchIrcMessageParser());
+                new TwitchIrcMessageParser(),
+                new TwitchMessageConverter());
     }
 }

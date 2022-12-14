@@ -1,11 +1,9 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.5'
+    id 'org.liquibase.gradle' version '2.1.1'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id 'org.liquibase.gradle' version '2.0.4'
 }
-
-apply plugin: 'liquibase'
 
 group 'korurg'
 version ''
@@ -15,12 +13,18 @@ repositories {
 }
 
 dependencies {
-    implementation project(':twitch-api')
-    implementation project(':utils')
-    implementation 'me.friwi:jcefmaven:107.1.9'
-    implementation 'org.xerial:sqlite-jdbc:3.39.4.1'
+    implementation project(':feature-twitch-impl')
+    implementation project(':feature-twitch-api')
+    implementation project(':core-chat-impl')
+    implementation project(':core-chat-api')
+    implementation project(':core-utils')
+    implementation project(':db')
+    implementation project(':settings')
 
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.7.5'
+    implementation project(':core-network-api')
+    implementation project(':core-network-impl')
+
+    implementation 'me.friwi:jcefmaven:107.1.9'
 
     liquibaseRuntime 'org.liquibase:liquibase-core:4.17.2'
     runtimeOnly 'org.liquibase:liquibase-core:4.17.2'

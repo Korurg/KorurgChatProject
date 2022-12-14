@@ -19,12 +19,12 @@
 
         stompClient.connect('', '', function () {
             console.log('Connected');
-            stompClient.subscribe('/topic/messages', function (message) {
+            stompClient.subscribe('/topic/messages', function (chatMessage) {
 
-                const jsonMessage = JSON.parse(message.body);
+                const jsonMessage = JSON.parse(chatMessage.body);
                 console.log(jsonMessage)
 
-                document.dispatchEvent(new CustomEvent('new-message', {
+                document.dispatchEvent(new CustomEvent('new-chatMessage', {
                         detail: jsonMessage
                     }
                 ));

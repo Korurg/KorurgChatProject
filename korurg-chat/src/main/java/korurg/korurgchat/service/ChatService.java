@@ -18,12 +18,12 @@
 
 package korurg.korurgchat.service;
 
+import korurg.chat.api.ChatConnection;
+import korurg.chat.api.domain.dto.Message;
 import korurg.korurgchat.domain.dto.ChatMessageVDTO;
-import korurg.twitch.irc.ChatConnection;
-import korurg.twitch.irc.message.CommonMessage;
-import korurg.twitch.irc.message.Message;
-import korurg.twitch.service.TwitchApiService;
-import korurg.twitch.service.TwitchUserService;
+import korurg.twitch.api.domain.model.TwitchUser;
+import korurg.twitch.impl.service.TwitchApiService;
+import korurg.twitch.impl.service.TwitchUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -49,24 +50,26 @@ public class ChatService {
 
     @PostConstruct
     private void postConstruct() {
-        connectToChats("rekvizit8bit");
+        connectToChats();
+
     }
 
     private void accept(Message message) {
-        if (message instanceof CommonMessage commonMessage) {
-            ChatMessageVDTO chatMessageVDTO = ChatMessageVDTO.builder()
-                    .message(commonMessage.getText())
-                    .user(commonMessage.getDisplayName())
-                    .userColor(commonMessage.getUserColor())
-                    .build();
+        ChatMessageVDTO chatMessageVDTO = ChatMessageVDTO.builder()
+                .message(message.getMessage())
+                .user(message.getDisplayName())
+                .userColor(message.getUserColor())
+                .badges(message.getBadges())
+                .platform(message.getPlatform().name())
+                .roles(message.getUserRoles().stream().map(userRole -> userRole.name()).toList())
+                .build();
 
-            simpMessagingTemplate.convertAndSend("/topic/messages", chatMessageVDTO);
-        }
+        simpMessagingTemplate.convertAndSend("/topic/messages", chatMessageVDTO);
     }
 
-    public void connectToChats(String twitchChat) {
+    public void connectToChats() {
         try {
-            twitchChatConnection.connect(twitchChat);
+            twitchChatConnection.connect();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {

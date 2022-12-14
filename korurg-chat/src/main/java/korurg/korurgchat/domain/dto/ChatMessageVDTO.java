@@ -23,6 +23,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -30,6 +32,8 @@ import lombok.Setter;
 public class ChatMessageVDTO {
     private final String user;
     private final String message;
-
     private final String userColor;
+    private final List<String> roles;
+    private final List<String> badges;
+    private final String platform;
 }
