@@ -22,6 +22,7 @@ import korurg.localization.impl.service.Localization;
 import korurg.localization.impl.service.LocalizationLoader;
 import korurg.localization.impl.service.LocalizationService;
 import korurg.settings.service.SettingsService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -32,27 +33,47 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LocalizationServiceUnitTest {
+    static SettingsService settingsService = Mockito.mock(SettingsService.class);
+    static LocalizationLoader localizationLoader = Mockito.mock(LocalizationLoader.class);
 
-    @Test
-    void test() {
-        SettingsService settingsService = Mockito.mock(SettingsService.class);
-        LocalizationLoader localizationLoader = Mockito.mock(LocalizationLoader.class);
-
+    @BeforeAll
+    static void beforeAll() {
         Localization localization1 = Localization.builder()
                 .description("description1")
                 .name("name1")
                 .author("author1")
-                .translation(Map.of())
+                .translation(Map.of("test-string-1", "test-string-translation-1"
+                        , "test-map-1", Map.of("test-string-2", "test-string-translation-2")))
                 .build();
 
         Mockito.when(localizationLoader.loadLocalizations(Mockito.any(File.class))).thenReturn(List.of(
                 localization1
         ));
+    }
 
+    @Test
+    void test_getLocalization_when_path_exists() {
         LocalizationService localizationService = new LocalizationService(settingsService, localizationLoader);
-
         List<Localization> localizations = localizationService.loadLocalizations();
 
         assertThat(localizations).hasSize(1);
+
+        localizationService.setLocalization(localizations.get(0).getId());
+
+        assertThat(localizationService.getLocalization("test-string-1")).isEqualTo("test-string-translation-1");
+        assertThat(localizationService.getLocalization("test-map-1.test-string-2")).isEqualTo("test-string-translation-2");
+    }
+
+    @Test
+    void test_getLocalization_when_path_not_exists() {
+        LocalizationService localizationService = new LocalizationService(settingsService, localizationLoader);
+        List<Localization> localizations = localizationService.loadLocalizations();
+
+        assertThat(localizations).hasSize(1);
+
+        localizationService.setLocalization(localizations.get(0).getId());
+
+        assertThat(localizationService.getLocalization("test-string-2")).isEqualTo("test-string-2");
+        assertThat(localizationService.getLocalization("test-map-2.test-string-3")).isEqualTo("test-map-2.test-string-3");
     }
 }
