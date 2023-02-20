@@ -12,6 +12,10 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    archiveFileName = 'korurg-chat.jar'
+}
+
 dependencies {
     implementation project(':feature-twitch-impl')
     implementation project(':feature-twitch-api')

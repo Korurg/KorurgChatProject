@@ -5,11 +5,11 @@ on:
     branches: [ "dev" ]
   pull_request:
     branches: [ "dev" ]
-env:
-  KORURG_CHAT_TWITCH_CLIENT_ID: ${{vars.KORURG_CHAT_TWITCH_CLIENT_ID}}
-  KORURG_CHAT_SENTRY_ENV: ${{vars.KORURG_CHAT_SENTRY_ENV}}
-  KORURG_CHAT_SENTRY_DSN: ${{vars.KORURG_CHAT_SENTRY_DSN}}
 
+env:
+  KORURG_CHAT_SENTRY_DSN: ${{ vars.KORURG_CHAT_SENTRY_DSN }}
+  KORURG_CHAT_SENTRY_ENV: dev
+  KORURG_CHAT_TWITCH_CLIENT_ID: ${{ vars.KORURG_CHAT_TWITCH_CLIENT_ID }}
 
 permissions:
   contents: read
@@ -19,18 +19,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3.3.0
       with:
-        ref: dev
+        ref: ${{ github.ref_name }}
+
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v3.10.0
       with:
         java-version: '17'
         distribution: 'corretto'
 
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2.4.0
       with:
         arguments: test
         
@@ -39,30 +48,39 @@ jobs:
     needs: build-and-test-unstable-release
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3.3.0
       with:
-        ref: dev
+        ref: ${{ github.ref_name }}
+
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v3.10.0
       with:
         java-version: '17'
         distribution: 'corretto'
 
+    - name: Setup env variables
+      run: |
+        bash ./.github/scripts/setup-env-variables.sh
+        cat "./korurg-chat/src/main/resources/application.yml"
+      shell: bash
+
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2.4.0
       with:
         arguments: korurg-chat:build -x test
 
     - name: Zip release
       run: |
-        echo "#!/bin/sh" > run-linux.sh
-        echo "java -jar korurg-chat.jar -Xss1m -Xmx128m" >> run-linux.sh
-        echo "start java -jar korurg-chat.jar -Xss1m -Xmx128m" > run-windows.bat
-        zip -7 ./korurg-chat-unstable.zip ./run-windows.bat
-        zip -7 ./korurg-chat-unstable.zip ./run-linux.sh
-        zip -7 ./korurg-chat-unstable.zip ./templates
-        zip -j -7 ./korurg-chat-unstable.zip ./korurg-chat/build/libs/korurg-chat.jar
+        bash ./.github/scripts/zip-folders.sh "korurg-chat-unstable"
       shell: bash
 
     - name: Create a Release
