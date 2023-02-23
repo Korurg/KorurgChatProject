@@ -15,6 +15,8 @@ repositories {
 dependencies {
     api 'org.xerial:sqlite-jdbc:3.40.1.0'
     api 'org.springframework.boot:spring-boot-starter-jdbc:2.7.8'
+    api 'com.github.gwenn:sqlite-dialect:0.1.2'
+
 
 
     liquibaseRuntime 'org.liquibase:liquibase-core:4.18.0'
