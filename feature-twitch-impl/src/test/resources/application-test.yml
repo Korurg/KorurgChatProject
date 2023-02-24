@@ -6,7 +6,7 @@ spring:
     password: admin
 
   jpa:
-    database-platform: korurg.db.config.SQLiteDialect
+    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
     hibernate:
       ddl-auto: none
     show-sql: true
