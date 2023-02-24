@@ -13,12 +13,12 @@ repositories {
 }
 
 dependencies {
-    implementation project(':db')
     implementation project(':settings')
     implementation project(':core-network-twitch-api')
     implementation project(':feature-twitch-api')
     implementation project(':core-chat-api')
 
+    implementation 'org.liquibase:liquibase-core:4.17.2'
     liquibaseRuntime 'org.liquibase:liquibase-core:4.17.2'
     runtimeOnly 'org.liquibase:liquibase-core:4.17.2'
 }

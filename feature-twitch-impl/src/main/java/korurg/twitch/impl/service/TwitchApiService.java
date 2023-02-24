@@ -34,7 +34,7 @@ public class TwitchApiService {
 
     private final TwitchFeignClientApi twitchApiFeignClient;
 
-    @Value("${twitch.client-id}")
+    @Value("${twitch.client-id:twitch_client_id}")
     private String twitchClientId;
 
     public void auth() {

@@ -36,7 +36,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TwitchUserService {
 
-    @Value("${twitch.client-id}")
+    @Value("${twitch.client-id:twitch_client_id}")
     private String twitchClientId;
 
     @Value("${korurg-chat.intervals.update-user-info-sec:604800}")

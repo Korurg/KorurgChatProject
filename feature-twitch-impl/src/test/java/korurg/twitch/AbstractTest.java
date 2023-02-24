@@ -33,7 +33,7 @@ import javax.transaction.Transactional;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = TestApplication.class)
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @Transactional
 public abstract class AbstractTest {

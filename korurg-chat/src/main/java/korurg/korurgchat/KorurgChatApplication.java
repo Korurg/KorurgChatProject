@@ -18,10 +18,8 @@
 
 package korurg.korurgchat;
 
-import io.sentry.Sentry;
 import korurg.korurgchat.ui.UiFactory;
 import korurg.korurgchat.ui.main.MainFrame;
-import korurg.localization.impl.service.LocalizationService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -29,12 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Arrays;
 
 @Slf4j

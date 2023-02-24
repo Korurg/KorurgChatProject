@@ -9,20 +9,23 @@ spring:
       pool:
         max-size: 12
   datasource:
-    driver-class-name: org.sqlite.JDBC
-    url: jdbc:sqlite:data.db
-
-  liquibase:
-    change-log: classpath:changelog/changelog-master.xml
+    twitch:
+      driver-class-name: org.sqlite.JDBC
+      url: jdbc:sqlite:data/twitch.db
+      liquibase:
+        change-log: classpath:changelog/changelog-twitch-master.xml
+    chat:
+      driver-class-name: org.sqlite.JDBC
+      url: jdbc:sqlite:data/chat.db
+      liquibase:
+        change-log: classpath:changelog/changelog-chat-master.xml
 
   jpa:
-    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
-    hibernate:
-      ddl-auto: none
-    show-sql: true
-    properties:
+    twitch:
+      database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
       hibernate:
-        default-schema: korurg_chat
+        ddl-auto: none
+      show-sql: true
 
 
 logging:

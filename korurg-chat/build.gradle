@@ -22,7 +22,6 @@ dependencies {
     implementation project(':core-chat-impl')
     implementation project(':core-chat-api')
     implementation project(':core-utils')
-    implementation project(':db')
     implementation project(':settings')
     implementation project(':core-exceptions')
     implementation project(':core-localization-api')
@@ -32,6 +31,7 @@ dependencies {
 
     implementation 'me.friwi:jcefmaven:107.1.9'
 
+    implementation 'org.liquibase:liquibase-core:4.17.2'
     liquibaseRuntime 'org.liquibase:liquibase-core:4.17.2'
     runtimeOnly 'org.liquibase:liquibase-core:4.17.2'
 }

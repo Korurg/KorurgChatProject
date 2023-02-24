@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    twitch:
+      driver-class-name: org.sqlite.JDBC
+      url: jdbc:sqlite:data/twitch.db
+
+  jpa:
+    twitch:
+      database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
+      hibernate:
+        ddl-auto: none
+      show-sql: true
+
+  liquibase:
+    change-log: classpath:changelog/changelog-twitch-master.xml
