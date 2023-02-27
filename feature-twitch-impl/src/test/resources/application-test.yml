@@ -2,8 +2,6 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:data-test.db
-    username: admin
-    password: admin
 
   jpa:
     database-platform: org.sqlite.hibernate.dialect.SQLiteDialect

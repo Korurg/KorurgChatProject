@@ -2,13 +2,15 @@ server:
   port: 8083
   tomcat:
     threads:
-      max: 12
+      max: 6
 spring:
   task:
     execution:
       pool:
-        max-size: 12
+        max-size: 6
   datasource:
+    hikari:
+      maximum-pool-size: 3
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:data.db
 
