@@ -20,6 +20,8 @@ package korurg.twitch;
 
 import korurg.network.twitch.api.TwitchFeignClientApi;
 import korurg.settings.service.SettingsService;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +30,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -43,5 +47,12 @@ public abstract class AbstractTest {
     @MockBean
     protected SettingsService settingsService;
 
-
+    //TODO: is it safe?
+    @AfterAll
+    static void cleanUp() {
+        try {
+            FileUtils.delete(new File("./data-test.db"));
+        } catch (IOException ignored) {
+        }
+    }
 }
