@@ -1,11 +1,13 @@
 plugins {
     id("java")
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("org.liquibase.gradle") version "2.1.1"
 }
 
 subprojects {
     apply {
         plugin("java")
+        plugin("org.liquibase.gradle")
     }
 
     repositories {
@@ -36,8 +38,8 @@ subprojects {
         compileOnly("org.mapstruct:mapstruct:1.5.3.Final")
         annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
 
-        implementation("io.sentry:sentry-spring-boot-starter:6.11.0")
-        implementation("io.sentry:sentry-logback:6.11.0")
+        implementation("io.sentry:sentry-spring-boot-starter:6.14.0")
+        implementation("io.sentry:sentry-logback:6.14.0")
 
         compileOnly("org.projectlombok:lombok:1.18.24")
         annotationProcessor("org.projectlombok:lombok:1.18.24")
@@ -46,5 +48,8 @@ subprojects {
         testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.9")
         testImplementation("org.junit.vintage:junit-vintage-engine:5.9.1")
         testImplementation("org.assertj:assertj-core:3.22.0")
+
+        liquibaseRuntime("org.liquibase:liquibase-core:4.18.0")
+        runtimeOnly("org.liquibase:liquibase-core:4.18.0")
     }
 }
